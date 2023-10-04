@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Transform _cubeToPlace;
     [SerializeField] private GameObject[] _canvasStartPage;
     [SerializeField] private float _ñubeReplacementRate = 0.5f;
-    [SerializeField] private GameObject _cubeToCreate, _allCubes;
+    [SerializeField] private GameObject _cubeToCreate, _allCubes, _vfx;
 
     private Color _toCameraColor;
     private Transform _mainCamera;
@@ -67,6 +67,14 @@ public class GameController : MonoBehaviour
             _newCubes.transform.SetParent(_allCubes.transform);
             _newCube.VectorAcceptance(_cubeToPlace.position);
             allCubesPosition.Add(_newCube.VectorReturn());
+
+            if (PlayerPrefs.GetString("music") != "No")
+            {
+                GetComponent<AudioSource>().Play();
+            }
+
+            GameObject _newVfx = Instantiate(_vfx, _cubeToPlace.transform.position, Quaternion.identity) as GameObject;
+            Destroy(_newVfx, 2f);
 
             _allCubesRb.isKinematic = true;
             _allCubesRb.isKinematic = false;
