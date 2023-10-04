@@ -863,6 +863,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38ea5110c8a80d41adc5f40b710e19a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bGColor:
+  - {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 0}
+  - {r: 0.6415094, g: 0.5579345, b: 0.13011748, a: 0}
+  - {r: 0.17372729, g: 0.24672231, b: 0.6037736, a: 0}
   _cubeToPlace: {fileID: 2003465249}
   _canvasStartPage:
   - {fileID: 226391669}
@@ -872,10 +876,6 @@ MonoBehaviour:
   "_\u0441ubeReplacementRate": 0.5
   _cubeToCreate: {fileID: 7503023121543080304, guid: d58fcd162b565ae44a55e97915da98ec, type: 3}
   _allCubes: {fileID: 1269313093}
-  _bGColor:
-  - {r: 0.7176471, g: 0.25256315, b: 0.21176468, a: 0}
-  - {r: 0.6415094, g: 0.5579345, b: 0.13011748, a: 0}
-  - {r: 0.17372729, g: 0.24672231, b: 0.6037736, a: 0}
 --- !u!4 &795295006
 Transform:
   m_ObjectHideFlags: 0

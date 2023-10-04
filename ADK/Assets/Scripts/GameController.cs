@@ -3,20 +3,20 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private Color[] _bGColor;
     [SerializeField] private Transform _cubeToPlace;
     [SerializeField] private GameObject[] _canvasStartPage;
     [SerializeField] private float _ñubeReplacementRate = 0.5f;
     [SerializeField] private GameObject _cubeToCreate, _allCubes;
-    [SerializeField] private Color[] _bGColor;
 
+    private Color _toCameraColor;
     private Transform _mainCamera;
     private Rigidbody _allCubesRb;
-    private bool _isLose, _firstCube;
     private Coroutine _showCubePlase;
+    private bool _isLose, _firstCube;
     private int _prevCountMaxHorizontal;
     private float _cameraMoveToYPosition, _cameraMoveSpeed = 2f;
     private CubePosition _newCube = new CubePosition(0, 1, 0);
@@ -35,9 +35,9 @@ public class GameController : MonoBehaviour
         new Vector3(1, 0, -1),
     };
 
-
     private void Start()
     {
+        _toCameraColor = Camera.main.backgroundColor;
         _mainCamera = Camera.main.transform;
         _cameraMoveToYPosition = 10f + _newCube.Y - 1f;
 
@@ -50,7 +50,7 @@ public class GameController : MonoBehaviour
         if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0) && _cubeToPlace != null && _allCubes != null && !EventSystem.current.IsPointerOverGameObject())
         {
 #if !UNITY_EDITOR
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            if (Input.GetTouch(0).phase != TouchPhase.Began)
                 return;
 #endif
 
@@ -83,6 +83,11 @@ public class GameController : MonoBehaviour
         }
 
         _mainCamera.localPosition = Vector3.MoveTowards(_mainCamera.localPosition, new Vector3(_mainCamera.localPosition.x, _cameraMoveToYPosition, _mainCamera.localPosition.z), _cameraMoveSpeed * Time.deltaTime);
+
+        if (Camera.main.backgroundColor != _toCameraColor)
+        {
+            Camera.main.backgroundColor = Color.Lerp(Camera.main.backgroundColor, _toCameraColor, Time.deltaTime / 1);
+        }
     }
 
     IEnumerator ShowCubePlase()
@@ -159,6 +164,7 @@ public class GameController : MonoBehaviour
                 return false;
             }
         }
+
         return true;
     }
 
@@ -177,37 +183,37 @@ public class GameController : MonoBehaviour
             {
                 _maxY = Convert.ToInt32(position.y);
             }
+
             if (Mathf.Abs(Convert.ToInt32(position.z)) > _maxZ)
             {
                 _maxZ = Convert.ToInt32(position.z);
             }
 
-            _cameraMoveToYPosition = 8f + _newCube.Y - 1;
+            _cameraMoveToYPosition = 10f + _newCube.Y - 1f;
             maxHorizontal = _maxX > _maxZ ? _maxX : _maxZ;
 
             if (maxHorizontal % 3 == 0 && _prevCountMaxHorizontal != maxHorizontal)
             {
-                _mainCamera.localPosition += new Vector3(0, 0, 2.5f);
+                _mainCamera.localPosition -= new Vector3(0, 0, 0.2f);
                 _prevCountMaxHorizontal = maxHorizontal;
             }
         }
 
         if (_maxY >= 10)
         {
-            Camera.main.backgroundColor = _bGColor[2];
+            _toCameraColor = _bGColor[2];
         }
 
         else if (_maxY >= 5)
         {
-            Camera.main.backgroundColor = _bGColor[1];
+            _toCameraColor = _bGColor[1];
         }
-
 
         else if (_maxY >= 2)
         {
-            Camera.main.backgroundColor = _bGColor[0];
+            _toCameraColor = _bGColor[0];
         }
-    }   
+    }
 }
 
 struct CubePosition
