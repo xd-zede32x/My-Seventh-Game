@@ -7,4 +7,9 @@ public class CanvasButtons : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public void LoadGitXub()
+    {
+        Application.OpenURL("https://github.com/xd-zede32x/My-seventh-gam");
+    }
 }

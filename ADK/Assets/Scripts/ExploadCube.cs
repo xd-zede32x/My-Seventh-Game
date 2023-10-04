@@ -18,7 +18,7 @@ public class ExploadCube : MonoBehaviour
 
             _buttonRestart.SetActive(true);
             _textGameOver.SetActive(true);
-            Camera.main.transform.position -= new Vector3(0, 0, 3f);
+            Camera.main.transform.position -= new Vector3(0, 0, 1f);
             Destroy(collision.gameObject);
             _collisionSet = true;
         }
