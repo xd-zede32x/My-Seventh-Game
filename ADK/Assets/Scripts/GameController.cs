@@ -11,9 +11,10 @@ public class GameController : MonoBehaviour
     [SerializeField] private Text _scoreText;
     [SerializeField] private Color[] _bGColor;
     [SerializeField] private Transform _cubeToPlace;
+    [SerializeField] private GameObject _allCubes, _vfx;
+    [SerializeField] private GameObject[] _cubesToCreate;
     [SerializeField] private GameObject[] _canvasStartPage;
     [SerializeField] private float _ñubeReplacementRate = 0.5f;
-    [SerializeField] private GameObject _cubeToCreate, _allCubes, _vfx;
 
     private Color _toCameraColor;
     private Transform _mainCamera;
@@ -21,8 +22,9 @@ public class GameController : MonoBehaviour
     private Coroutine _showCubePlase;
     private bool _isLose, _firstCube;
     private int _prevCountMaxHorizontal;
-    private float _cameraMoveToYPosition, _cameraMoveSpeed = 2f;
     private CubePosition _newCube = new CubePosition(0, 1, 0);
+    private float _cameraMoveToYPosition, _cameraMoveSpeed = 2f;
+    private List<GameObject> _posibleCubeToCreate = new List<GameObject>();
 
     private List<Vector3> allCubesPosition = new List<Vector3>
     {
@@ -40,6 +42,58 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        #region ShopCubes
+        if (PlayerPrefs.GetInt("Score") < 5)
+        {
+            _posibleCubeToCreate.Add(_cubesToCreate[0]);
+        }
+
+        else if (PlayerPrefs.GetInt("Score") < 10)
+        {
+            AddPosibleCubes(2);
+        }
+
+        else if (PlayerPrefs.GetInt("Score") < 15)
+        {
+            AddPosibleCubes(3);
+        }
+
+        else if (PlayerPrefs.GetInt("Score") < 20)
+        {
+            AddPosibleCubes(4);
+        }
+
+        else if (PlayerPrefs.GetInt("Score") < 25)
+        {
+            AddPosibleCubes(5);
+        }
+
+        else if (PlayerPrefs.GetInt("Score") < 30)
+        {
+            AddPosibleCubes(6);
+        }
+
+        else if (PlayerPrefs.GetInt("Score") < 35)
+        {
+            AddPosibleCubes(7);
+        }
+
+        else if (PlayerPrefs.GetInt("Score") < 40)
+        {
+            AddPosibleCubes(8);
+        }
+
+        else if (PlayerPrefs.GetInt("Score") < 50)
+        {
+            AddPosibleCubes(9);
+        }
+
+        else
+        {
+            AddPosibleCubes(10);
+        }
+
+        #endregion
         _scoreText.text = "<size=50>Best:</size> " + PlayerPrefs.GetInt("Score") + " <size=40>Score:</size>0\r\n\r\n";
 
         _toCameraColor = Camera.main.backgroundColor;
@@ -68,7 +122,20 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            GameObject _newCubes = Instantiate(_cubeToCreate, _cubeToPlace.position, Quaternion.identity) as GameObject;
+            GameObject _createCube = null;
+
+            if (_posibleCubeToCreate.Count == 1)
+            { 
+                _createCube = _posibleCubeToCreate[0];
+            }
+
+            else  
+            {
+                _createCube = _posibleCubeToCreate[UnityEngine.Random.Range(0, _posibleCubeToCreate.Count)];
+            }
+                   
+
+            GameObject _newCubes = Instantiate(_createCube, _cubeToPlace.position, Quaternion.identity) as GameObject;
             _newCubes.transform.SetParent(_allCubes.transform);
             _newCube.VectorAcceptance(_cubeToPlace.position);
             allCubesPosition.Add(_newCube.VectorReturn());
@@ -88,7 +155,7 @@ public class GameController : MonoBehaviour
             MoveCameraChaneBg();
         }
 
-        if (!_isLose && _allCubesRb.velocity.magnitude > 0.1f)
+        if (!_isLose && _allCubesRb.velocity.magnitude > 0.1f) 
         {
             Destroy(_cubeToPlace.gameObject);
             _isLose = true;
@@ -233,6 +300,14 @@ public class GameController : MonoBehaviour
         else if (_maxY >= 2)
         {
             _toCameraColor = _bGColor[0];
+        }
+    }
+
+    private void AddPosibleCubes(int till)
+    {
+        for (int i = 0; i < till; i++)
+        {
+            _posibleCubeToCreate.Add(_cubesToCreate[i]);
         }
     }
 }
