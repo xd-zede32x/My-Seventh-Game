@@ -21,7 +21,7 @@ public class CanvasButtons : MonoBehaviour
             GetComponent<AudioSource>().Play();
         }
 
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void LoadGitXub()
@@ -32,6 +32,26 @@ public class CanvasButtons : MonoBehaviour
         }
 
         Application.OpenURL("https://github.com/xd-zede32x/My-seventh-gam");
+    }
+
+    public void OpenShop()
+    {
+        if (PlayerPrefs.GetString("music") != "No")
+        {
+            GetComponent<AudioSource>().Play();
+        }
+
+        SceneManager.LoadScene("Shop");
+    }
+
+    public void LoseShop()
+    {
+        if (PlayerPrefs.GetString("music") != "No")
+        {
+            GetComponent<AudioSource>().Play();
+        }
+
+        SceneManager.LoadScene("Arcada");
     }
 
     public void MusicWork()

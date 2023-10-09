@@ -1,11 +1,14 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private Text _scoreText;
     [SerializeField] private Color[] _bGColor;
     [SerializeField] private Transform _cubeToPlace;
     [SerializeField] private GameObject[] _canvasStartPage;
@@ -37,6 +40,8 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        _scoreText.text = "<size=50>Best:</size> " + PlayerPrefs.GetInt("Score") + " <size=40>Score:</size>0\r\n\r\n";
+
         _toCameraColor = Camera.main.backgroundColor;
         _mainCamera = Camera.main.transform;
         _cameraMoveToYPosition = 10f + _newCube.Y - 1f;
@@ -196,15 +201,23 @@ public class GameController : MonoBehaviour
             {
                 _maxZ = Convert.ToInt32(position.z);
             }
+        }
 
-            _cameraMoveToYPosition = 10f + _newCube.Y - 1f;
-            maxHorizontal = _maxX > _maxZ ? _maxX : _maxZ;
+        _maxY--;
+        if (PlayerPrefs.GetInt("Score") < _maxY)
+        {
+            PlayerPrefs.SetInt("Score", _maxY);
+        }
 
-            if (maxHorizontal % 3 == 0 && _prevCountMaxHorizontal != maxHorizontal)
-            {
-                _mainCamera.localPosition -= new Vector3(0, 0, 0.2f);
-                _prevCountMaxHorizontal = maxHorizontal;
-            }
+        _scoreText.text = "<size=50>Best:</size> " + PlayerPrefs.GetInt("Score") + " <size=40>Score:</size> " + _maxY + " \r\n\r\n";
+
+        _cameraMoveToYPosition = 10f + _newCube.Y - 1f;
+        maxHorizontal = _maxX > _maxZ ? _maxX : _maxZ;
+
+        if (maxHorizontal % 3 == 0 && _prevCountMaxHorizontal != maxHorizontal)
+        {
+            _mainCamera.localPosition -= new Vector3(0, 0, 0.2f);
+            _prevCountMaxHorizontal = maxHorizontal;
         }
 
         if (_maxY >= 10)
